@@ -1,0 +1,88 @@
+log-level: info
+
+external-controller: 0.0.0.0:9090
+
+find-process-mode: off
+
+sniffer:
+  enable: true
+  override-destination: true
+
+proxy-providers:
+  NiuBi:
+    type: http
+    url: "subscribe link"
+    interval: 1800
+    proxy: DIRECT
+    health-check:
+      enable: true
+      url: https://cp.cloudflare.com
+      interval: 300
+      timeout: 5000
+      lazy: true
+      expected-status: 204
+    override:
+      additional-prefix: "[NiuBi]"
+      skip-cert-verify: false
+      
+proxy-groups:
+  - name: "HK_proxy"
+    type: url-test
+    use:
+      - NiuBi
+    url: https://cp.cloudflare.com
+    interval: 300
+    filter: "(?i)港|hk|hongkong|hong kong"
+    exclude-type: "Vmess|Trojan|Vless"
+  
+  - name: "Near_proxy"
+    type: url-test
+    use:
+      - NiuBi
+    url: https://cp.cloudflare.com
+    interval: 300
+    filter: "(?i)台|tw|taiwan|新|SG|日|JP|韩|KR"
+    exclude-type: "Vmess|Trojan|Vless"
+
+  - name: "Western_proxy"
+    type: url-test
+    use:
+      - NiuBi
+    url: https://cp.cloudflare.com
+    interval: 300
+    filter: "(?i)台|tw|taiwan|新|SG|日|JP|韩|KR|US|美|CA|加|澳|AU"
+    exclude-type: "Vmess|Trojan|Vless"
+  
+  - name: "Auto"
+    type: url-test
+    use:
+      - NiuBi
+    url: https://cp.cloudflare.com
+    interval: 300
+    exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
+    exclude-type: "Vmess|Trojan|Vless"
+
+listeners:
+  - name: socks5-Auto
+    type: socks
+    port: 10800
+    #listen: 0.0.0.0 # 默认监听 0.0.0.0
+    # rule: sub-rule-name1 # 默认使用 rules,如果未找到 sub-rule 则直接使用 rules
+    # proxy: HK_proxy # 如果不为空则直接将该入站流量交由指定proxy处理
+    # udp: false # 默认 true
+  - name: socks5-HK
+    type: socks
+    port: 10801
+  - name: socks5-Near
+    type: socks
+    port: 10802
+  - name: socks5-W
+    type: socks
+    port: 10803
+
+rules: 
+  - IN-NAME,socks5-HK,HK_proxy
+  - IN-NAME,socks5-Near,Near_proxy
+  - IN-NAME,socks5-W,Western_proxy
+  - IN-NAME,socks5-Auto,Auto
+  - MATCH,Auto
