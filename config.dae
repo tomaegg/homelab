@@ -1,0 +1,87 @@
+global {
+  # Bind to LAN and/or WAN as you want. Replace the interface name to your own.
+  lan_interface: br-lan,WireGuard
+  wan_interface: auto # Use "auto" to auto detect WAN interface.
+
+  log_level: info
+  allow_insecure: false
+  auto_config_kernel_parameter: true
+}
+
+subscription {
+  # Fill in your subscription links here.
+}
+
+# See https://github.com/daeuniverse/dae/blob/main/docs/en/configuration/dns.md for full examples.
+dns {
+  # ipversion_prefer: 4
+  upstream {
+   smartdns: 'udp://127.0.0.1:5333'
+   # or use adguard
+  }
+  routing {
+    request {
+      fallback: smartdns
+    }
+  }
+}
+
+node {
+  Auto: 'socks5://localhost:10800'
+  HK: 'socks5://localhost:10801'
+  Near: 'socks5://localhost:10802'
+  Western: 'socks5://localhost:10803'
+}
+
+group {
+  proxy {
+    policy: min_moving_avg
+    filter: !name(regex: '剩余|流量|到期')
+    && !name(regex: '朝鲜|KP')
+  }
+
+  NearNodes {
+    policy: min_moving_avg
+    filter: !name(regex: '剩余|流量|到期')
+    && name(regex: 'HK|香港|SG|新加坡|TW|台湾|JP|日本|KR|韩|Near')
+  }
+
+  WNodes {
+    policy: min_moving_avg
+    filter: !name(regex: '剩余|流量|到期')
+    && name(regex: 'US|USA|美|SG|新加坡|UK|英|CA|加拿大|日本|JP|澳|AU|Western')
+  }
+
+  DNS {
+    policy: min
+    filter: !name(regex: '剩余|流量|到期')
+  }
+}
+
+
+# See https://github.com/daeuniverse/dae/blob/main/docs/en/configuration/routing.md for full examples.
+routing {
+  pname(NetworkManager, systemd-resolved, dnsmasq) -> must_direct
+  pname(mihomo) -> must_direct
+  # 为了分流只需要最快节点, 此处劫持smartdns的oversea DNS请求
+  pname(smartdns) && dip(8.8.8.8, 8.8.4.4, 1.1.1.1) && dport(53) -> DNS
+  pname(smartdns) && l4proto(udp) && dport(53) -> must_direct
+  pname(AdGuardHome) && l4proto(udp) && dport(53) -> must_direct
+
+  dip(224.0.0.0/3, 'ff00::/8') -> direct
+  ### Write your rules below.
+
+
+  # 西方的节点
+  domain(geosite: category-ai-!cn) -> WNodes
+  domain(geosite: google, geosite: github) -> NearNodes
+
+  # Disable h3 because it usually consumes too much cpu/mem resources.
+  l4proto(udp) && dport(443) -> block
+
+  dip(geoip:private) -> direct
+  dip(geoip:cn) -> direct
+  domain(geosite:cn) -> direct
+
+  fallback: proxy
+}

@@ -1,6 +1,12 @@
-log-level: info
+log-level: warning
+
+allow-lan: true
 
 external-controller: 0.0.0.0:9090
+external-controller-cors:
+  allow-origins:
+    - "*"
+  allow-private-network: true
 
 find-process-mode: off
 
@@ -11,7 +17,7 @@ sniffer:
 proxy-providers:
   NiuBi:
     type: http
-    url: "subscribe link"
+    url: "subscription link"
     interval: 1800
     proxy: DIRECT
     health-check:
@@ -24,7 +30,7 @@ proxy-providers:
     override:
       additional-prefix: "[NiuBi]"
       skip-cert-verify: false
-      
+
 proxy-groups:
   - name: "HK_proxy"
     type: url-test
@@ -34,7 +40,8 @@ proxy-groups:
     interval: 300
     filter: "(?i)港|hk|hongkong|hong kong"
     exclude-type: "Vmess|Trojan|Vless"
-  
+    exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
+
   - name: "Near_proxy"
     type: url-test
     use:
@@ -43,6 +50,7 @@ proxy-groups:
     interval: 300
     filter: "(?i)台|tw|taiwan|新|SG|日|JP|韩|KR"
     exclude-type: "Vmess|Trojan|Vless"
+    exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
 
   - name: "Western_proxy"
     type: url-test
@@ -52,15 +60,16 @@ proxy-groups:
     interval: 300
     filter: "(?i)台|tw|taiwan|新|SG|日|JP|韩|KR|US|美|CA|加|澳|AU"
     exclude-type: "Vmess|Trojan|Vless"
-  
+    exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
+
   - name: "Auto"
     type: url-test
     use:
       - NiuBi
     url: https://cp.cloudflare.com
     interval: 300
-    exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
     exclude-type: "Vmess|Trojan|Vless"
+    exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
 
 listeners:
   - name: socks5-Auto
@@ -80,7 +89,7 @@ listeners:
     type: socks
     port: 10803
 
-rules: 
+rules:
   - IN-NAME,socks5-HK,HK_proxy
   - IN-NAME,socks5-Near,Near_proxy
   - IN-NAME,socks5-W,Western_proxy
