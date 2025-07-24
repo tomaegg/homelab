@@ -20,16 +20,17 @@ unified-delay: true
 # smartdns根据规则进行解析，如果链接是国内的，那么是没问题的，
 # 但是如果链接是国外的, smartdns会利用海外发送，此时如果dae那边没有可用节点
 # 解析就会失败. 如果出现这种情况，就启用如下配置利用国内dns发出去解析.
-# 一般不太可能出现
+# 一般不太可能出现, 我们默认节点都是可以从国内dns获取的
 dns:
-  enable: false
+  enable: true
   proxy-server-nameserver:
     - https://223.5.5.5/dns-query
     - 119.29.29.29
 
-# 实际上部分流量根本不会经过mihomo，所以这里skip之类的无所谓
+# 实际上部分流量根本不会经过mihomo，所以这里要不要skip部分ip之类的无所谓
+# dae已经会进行sniff了, 其实mihomo没有必要再次sniff, 如果需要sniff再考虑
 sniffer:
-  enable: true
+  enable: false
   parse-pure-ip: true
   override-destination: true
   sniff:
