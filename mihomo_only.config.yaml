@@ -45,7 +45,7 @@ sniffer:
       ports: [443, 8443]
 
 proxy-providers:
-  NiuBi:
+  niubi:
     type: http
     url: "subscription link"
     interval: 1800
@@ -58,48 +58,72 @@ proxy-providers:
       lazy: true
       expected-status: 204
     override:
-      additional-prefix: "[NiuBi]"
+      additional-prefix: "[niubi]"
+      skip-cert-verify: false
+  linghunyun:
+    type: http
+    url: "subscription link"
+    interval: 1800
+    proxy: DIRECT
+    health-check:
+      enable: true
+      url: https://cp.cloudflare.com
+      interval: 300
+      timeout: 5000
+      lazy: true
+      expected-status: 204
+    override:
+      additional-prefix: "[linghunyun]"
       skip-cert-verify: false
 
 proxy-groups:
-  - name: "HK_proxy"
+  - name: "Near"
     type: url-test
     use:
-      - NiuBi
+      - niubi
+      - linghunyun
     url: https://cp.cloudflare.com
     interval: 300
-    filter: "(?i)港|hk|hongkong|hong kong"
-    exclude-type: "Vmess|Trojan|Vless"
-    exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
+    exclude-filter: "套餐|到期|线路|订阅|更新|流量|剩余|0.1x"
+    filter: "(?i)港|台|新|日|韩|hk|tw|sg|jp|kr"
 
-  - name: "Near_proxy"
+  - name: "AI"
     type: url-test
     use:
-      - NiuBi
+      - niubi
+      - linghunyun
     url: https://cp.cloudflare.com
     interval: 300
-    filter: "(?i)台|tw|taiwan|新|SG|日|JP|韩|KR"
-    exclude-type: "Vmess|Trojan|Vless"
-    exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
+    exclude-filter: "套餐|到期|线路|订阅|更新|流量|剩余|0.1x"
+    filter: "(?i)gpt|新|日|美|加|澳|德|us|ca|au|jp"
 
-  - name: "Western_proxy"
+  - name: "West"
     type: url-test
     use:
-      - NiuBi
+      - niubi
+      - linghunyun
     url: https://cp.cloudflare.com
     interval: 300
-    filter: "(?i)台|tw|taiwan|新|SG|日|JP|韩|KR|US|美|CA|加|澳|AU"
-    exclude-type: "Vmess|Trojan|Vless"
     exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
+    filter: "(?i)gpt|新|日|美|加|澳|德|us|ca|au|jp"
 
   - name: "Auto"
     type: url-test
     use:
-      - NiuBi
+      - niubi
+      - linghunyun
     url: https://cp.cloudflare.com
     interval: 300
-    exclude-type: "Vmess|Trojan|Vless"
-    exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
+    exclude-filter: "套餐|到期|线路|订阅|更新|流量|剩余|0.1x"
+
+  - name: "Select"
+    type: select
+    use:
+      - niubi
+      - linghunyun
+    url: https://cp.cloudflare.com
+    interval: 300
+    exclude-filter: "套餐|到期|线路|订阅|更新|流量|剩余|0.1x"
 
 listeners:
   - name: socks5-Auto
@@ -109,19 +133,23 @@ listeners:
     # rule: sub-rule-name1 # 默认使用 rules,如果未找到 sub-rule 则直接使用 rules
     # proxy: HK_proxy # 如果不为空则直接将该入站流量交由指定proxy处理
     # udp: false # 默认 true
-  - name: socks5-HK
-    type: socks
-    port: 10801
   - name: socks5-Near
     type: socks
+    port: 10801
+  - name: socks5-AI
+    type: socks
     port: 10802
-  - name: socks5-W
+  - name: socks5-West
     type: socks
     port: 10803
+  - name: socks5-Select
+    type: socks
+    port: 10804
 
 rules:
-  - IN-NAME,socks5-HK,HK_proxy
-  - IN-NAME,socks5-Near,Near_proxy
-  - IN-NAME,socks5-W,Western_proxy
+  - IN-NAME,socks5-Near,Near
+  - IN-NAME,socks5-AI,AI
+  - IN-NAME,socks5-West,West
+  - IN-NAME,socks5-Select,Select
   - IN-NAME,socks5-Auto,Auto
   - MATCH,Auto
