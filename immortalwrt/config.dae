@@ -1,0 +1,41 @@
+global {
+  lan_interface: br-lan,WireGuard
+  wan_interface: auto
+  log_level: info
+  allow_insecure: false
+  auto_config_kernel_parameter: true
+  dial_mode: ip
+}
+
+dns {
+  upstream {
+    adguard: 'udp://127.0.0.1:55553'
+  }
+  routing {
+    request {
+      fallback: adguard
+    }
+  }
+}
+
+node {
+  proxy: 'socks5://localhost:32520'
+}
+
+group {
+  proxy {
+    policy: fixed(0)
+  }
+}
+
+routing {
+  pname(NetworkManager, clash-meta, mihomo, clash) -> must_direct 
+  pname(smartdns) && l4proto(udp) && dport(53) -> must_direct     # smartdns -> upstream
+  pname(smartdns) && l4proto(udp) && dport(7953) -> must_direct   # smartdns -> mihomo
+  pname(AdGuardHome) && l4proto(udp) && dport(53) -> must_direct  # adguard -> smartdns
+
+  dip(198.18.0.0/16) -> proxy
+  dip(geoip:private) -> direct
+  dip(geoip:cn) -> direct
+  fallback: proxy
+}
