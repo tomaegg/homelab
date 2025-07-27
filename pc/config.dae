@@ -34,6 +34,7 @@ group {
 routing {
   pname(NetworkManager, clash-meta, mihomo, clash) -> must_direct
   dip(198.18.0.0/16) -> proxy
+  dip(224.0.0.0/3, 'ff00::/8') -> direct
   dip(geoip:private) -> direct
   dip(geoip:cn) -> direct
   fallback: proxy
