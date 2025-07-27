@@ -45,41 +45,45 @@ proxy-providers:
 proxy-groups:
   - name: "HK_proxy"
     type: url-test
-    use:
-      - NiuBi
     url: https://cp.cloudflare.com
     interval: 300
-    filter: "(?i)港|hk|hongkong|hong kong"
-    exclude-type: "Vmess|Trojan|Vless"
+    include-all: true
+    exclude-type: direct
     exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
+    filter: "(?i)港|hk|hongkong|hong kong"
 
   - name: "Near_proxy"
     type: url-test
-    use:
-      - NiuBi
     url: https://cp.cloudflare.com
     interval: 300
-    filter: "(?i)台|tw|taiwan|新|SG|日|JP|韩|KR"
-    exclude-type: "Vmess|Trojan|Vless"
+    include-all: true
+    exclude-type: direct
     exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
+    filter: "(?i)台|tw|taiwan|新|SG|日|JP|韩|KR"
 
   - name: "Western_proxy"
     type: url-test
-    use:
-      - NiuBi
     url: https://cp.cloudflare.com
     interval: 300
-    filter: "(?i)台|tw|taiwan|新|SG|日|JP|韩|KR|US|美|CA|加|澳|AU"
-    exclude-type: "Vmess|Trojan|Vless"
+    include-all: true
+    exclude-type: direct
     exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
+    filter: "(?i)台|tw|taiwan|新|SG|日|JP|韩|KR|US|美|CA|加|澳|AU"
 
   - name: "Auto"
     type: url-test
-    use:
-      - NiuBi
     url: https://cp.cloudflare.com
     interval: 300
-    exclude-type: "Vmess|Trojan|Vless"
+    include-all: true
+    exclude-type: direct
+    exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
+
+  - name: "Select"
+    type: select
+    url: https://cp.cloudflare.com
+    interval: 300
+    include-all: true
+    exclude-type: direct
     exclude-filter: "线路|订阅|更新|流量|剩余|0.1x"
 
 listeners:
@@ -90,19 +94,22 @@ listeners:
     # rule: sub-rule-name1 # 默认使用 rules,如果未找到 sub-rule 则直接使用 rules
     # proxy: HK_proxy # 如果不为空则直接将该入站流量交由指定proxy处理
     # udp: false # 默认 true
-  - name: socks5-HK
-    type: socks
-    port: 10801
   - name: socks5-Near
     type: socks
+    port: 10801
+  - name: socks5-AI
+    type: socks
     port: 10802
-  - name: socks5-W
+  - name: socks5-West
     type: socks
     port: 10803
+  - name: socks5-Select
+    type: socks
+    port: 10804
 
 rules:
-  - IN-NAME,socks5-HK,HK_proxy
-  - IN-NAME,socks5-Near,Near_proxy
-  - IN-NAME,socks5-W,Western_proxy
   - IN-NAME,socks5-Auto,Auto
+  - IN-NAME,socks5-Near,Near_proxy
+  - IN-NAME,socks5-AI,Western_proxy
+  - IN-NAME,socks5-West,Western_proxy
   - MATCH,Auto

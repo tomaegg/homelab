@@ -1,0 +1,70 @@
+
+global {
+  # Bind to LAN and/or WAN as you want. Replace the interface name to your own.
+  lan_interface: br-lan,WireGuard
+  wan_interface: auto # Use "auto" to auto detect WAN interface.
+
+  log_level: info
+  allow_insecure: false
+  auto_config_kernel_parameter: true
+}
+
+dns {
+  upstream {
+    alidns: 'udp://223.5.5.5:53'
+    googledns: 'tcp+udp://8.8.8.8:53'
+  }
+  routing {
+    request {
+      qname(geosite:category-ads) -> reject
+      qname(geosite:category-ads-all) -> reject
+      qname(geosite:cn) -> alidns
+      fallback: googledns
+    }
+  }
+}
+
+node {
+  Auto: 'socks5://localhost:10800'
+  Near: 'socks5://localhost:10801'
+  AI:   'socks5://localhost:10802'
+  West: 'socks5://localhost:10803'
+  Select: 'socks5://localhost:10804'
+}
+
+group {
+  Near{
+    filter: name(Near)
+    policy: fixed(0)
+  }
+  AI{
+    filter: name(AI)
+    policy: fixed(0)
+  }
+  West{
+    filter: name(West)
+    policy: fixed(0)
+  }
+  Auto{
+    filter: name(Auto)
+    policy: fixed(0)
+  }
+}
+
+
+routing {
+  pname(clash-meta) -> must_direct
+  pname(mihomo) -> must_direct
+  pname(NetworkManager, systemd-resolved) -> direct
+
+  dip(224.0.0.0/3, 'ff00::/8') -> direct
+
+  domain(geosite: category-ai-!cn) -> AI
+  domain(geosite: google, geosite: github) -> Near
+
+  dip(geoip:private) -> direct
+  dip(geoip:cn) -> direct
+  domain(geosite:cn) -> direct
+
+  fallback: Auto
+}
