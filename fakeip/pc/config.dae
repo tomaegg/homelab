@@ -22,7 +22,7 @@ dns {
 }
 
 node {
-  proxy: 'socks5://localhost:7897'
+  proxy: 'socks5://localhost:32520'
 }
 
 group {

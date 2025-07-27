@@ -9,10 +9,6 @@ global {
   auto_config_kernel_parameter: true
 }
 
-subscription {
-  # Fill in your subscription links here.
-}
-
 # See https://github.com/daeuniverse/dae/blob/main/docs/en/configuration/dns.md for full examples.
 dns {
   # ipversion_prefer: 4
@@ -55,7 +51,6 @@ group {
 }
 
 
-# See https://github.com/daeuniverse/dae/blob/main/docs/en/configuration/routing.md for full examples.
 routing {
   pname(mihomo, clash-meta) -> must_direct
   pname(NetworkManager, systemd-resolved, dnsmasq) -> must_direct

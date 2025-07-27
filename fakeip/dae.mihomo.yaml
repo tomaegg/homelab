@@ -16,6 +16,7 @@ external-controller-cors:
   allow-origins:
     - "*"
   allow-private-network: true
+secret: enter_password
 
 # ==================global config end=====================
 
