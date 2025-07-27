@@ -299,12 +299,14 @@ proxy-groups:
     type: url-test
     include-all: true
     exclude-type: direct
+    <<: *exclude-filter
     filter: "(?i)日|新|港|台|韩|JP|SG|HK|TW|KP"
 
   - name: West
     type: url-test
     include-all: true
     exclude-type: direct
+    <<: *exclude-filter
     filter: "(?i)日|新|美|加|德|澳|JP|SG|US|CA|GE|AU"
 
   - name: 美国
