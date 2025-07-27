@@ -28,6 +28,9 @@ dns:
   ipv6: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
+  fake-ip-filter: 
+    - zhuzhuzhu.xxxx.com
+    - submit.xxxx.cn
   direct-nameserver:
     - system
   proxy-server-nameserver:
