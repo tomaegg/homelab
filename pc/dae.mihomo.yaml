@@ -31,6 +31,7 @@ dns:
   fake-ip-filter: 
     - zhuzhuzhu.xxxx.com
     - submit.xxxx.cn
+    - ping.archlinux.org
   direct-nameserver:
     - system
   proxy-server-nameserver:
