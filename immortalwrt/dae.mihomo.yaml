@@ -42,6 +42,7 @@ proxy-providers:
     type: http
     url: ""
     interval: 1800
+    path: ./niubi.yaml
     proxy: DIRECT
     health-check:
       enable: true
@@ -57,6 +58,7 @@ proxy-providers:
     type: http
     url: ""
     interval: 1800
+    path: ./linghunyun.yaml
     proxy: DIRECT
     health-check:
       enable: true

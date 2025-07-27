@@ -31,7 +31,7 @@ group {
 routing {
   pname(NetworkManager, clash-meta, mihomo, clash) -> must_direct 
   pname(smartdns) && l4proto(udp) && dport(53) -> must_direct     # smartdns -> upstream
-  pname(smartdns) && l4proto(udp) && dport(7953) -> must_direct   # smartdns -> mihomo
+  pname(smartdns) && l4proto(udp) && dport(7853) -> must_direct   # smartdns -> mihomo
   pname(AdGuardHome) && l4proto(udp) && dport(53) -> must_direct  # adguard -> smartdns
 
   dip(198.18.0.0/16) -> proxy
