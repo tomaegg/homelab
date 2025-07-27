@@ -350,7 +350,6 @@ rules:
   - RULE-SET,telegram_domain,Telegram
   - RULE-SET,netflix_domain,NETFLIX
   - RULE-SET,spotify_domain,Spotify
-  - RULE-SET,geolocation-!cn,其他
 
   - RULE-SET,google_ip,Google
   - RULE-SET,netflix_ip,NETFLIX
@@ -389,9 +388,6 @@ rule-providers:
   spotify_domain:
     <<: *domain
     url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/spotify.mrs"
-  geolocation-!cn:
-    <<: *domain
-    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/geolocation-!cn.mrs"
 
   google_ip:
     <<: *ip
