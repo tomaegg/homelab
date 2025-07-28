@@ -282,24 +282,28 @@ proxy-groups:
     type: url-test
     include-all: true
     exclude-type: direct
+    <<: *exclude-filter
     filter: "(?i)港|hk|hongkong|hong kong"
 
   - name: 台湾
     type: url-test
     include-all: true
     exclude-type: direct
+    <<: *exclude-filter
     filter: "(?i)台|tw|taiwan"
 
   - name: 日本
     type: url-test
     include-all: true
     exclude-type: direct
+    <<: *exclude-filter
     filter: "(?i)日|jp|japan"
 
   - name: 韩国
     type: url-test
     include-all: true
     exclude-type: direct
+    <<: *exclude-filter
     filter: "(?i)韩|kp|korea"
 
   - name: Fast
@@ -320,12 +324,14 @@ proxy-groups:
     type: url-test
     include-all: true
     exclude-type: direct
+    <<: *exclude-filter
     filter: "(?i)美|us|unitedstates|united states"
 
   - name: 新加坡
     type: url-test
     include-all: true
     exclude-type: direct
+    <<: *exclude-filter
     filter: "(?i)(新|sg|singapore)"
 
   - name: 其它地区
