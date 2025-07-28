@@ -240,26 +240,7 @@ proxy-groups:
         REJECT,
       ]
 
-  - name: 哔哩哔哩
-    type: select
-    proxies:
-      [
-        默认,
-        West,
-        Fast,
-        香港,
-        台湾,
-        日本,
-        新加坡,
-        美国,
-        其它地区,
-        全部节点,
-        自动选择,
-        DIRECT,
-        REJECT,
-      ]
-
-  - name: 其他
+  - name: TikTok
     type: select
     proxies:
       [
@@ -355,11 +336,13 @@ proxy-groups:
     tolerance: 30
 
 rules:
-  - RULE-SET,github_domain,Github
-  - RULE-SET,twitter_domain,Twitter
+  # 常用访问前置
   - RULE-SET,youtube_domain,YouTube
   - RULE-SET,google_domain,Google
   - RULE-SET,ai_domain,AI
+  - RULE-SET,github_domain,Github
+  - RULE-SET,twitter_domain,Twitter
+  - RULE-SET,tiktok_domain,TikTok
   - RULE-SET,telegram_domain,Telegram
   - RULE-SET,netflix_domain,NETFLIX
   - RULE-SET,spotify_domain,Spotify
@@ -395,6 +378,9 @@ rule-providers:
   telegram_domain:
     <<: *domain
     url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"
+  tiktok_domain:
+    <<: *domain
+    url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/tiktok.mrs"
   netflix_domain:
     <<: *domain
     url: "https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"
