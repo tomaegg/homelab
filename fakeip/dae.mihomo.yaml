@@ -357,8 +357,8 @@ rules:
   - GEOSITE,netflix,NETFLIX
   - GEOSITE,spotify,Spotify
 
-  - GEOIP,telegram,Telegram
-  - GEOIP,google,Google
-  - GEOIP,netflix,NETFLIX
-  - GEOIP,twitter,Twitter
+  - GEOIP,telegram,Telegram,no-resolve
+  - GEOIP,google,Google,no-resolve
+  - GEOIP,netflix,NETFLIX,no-resolve
+  - GEOIP,twitter,Twitter,no-resolve
   - MATCH,默认
