@@ -1,5 +1,6 @@
 # 我没有很好的家庭网关设计方案
 
+
 > 以下为旧设计, socks5的暴露容易出现udp timeout, 暂时没有找到原因
 
 ## 总体结构
@@ -15,3 +16,7 @@ DNS分流由smartdns结合dnsmasq-china-list负责，流量分流走dae，如此
 - DNS增强与分流: smartdns
 - DNS劫持与流量路由: dae
 - 广泛协议支持: mihomo
+
+## 参考文章
+
+- [geosite分流](https://www.aloxaf.com/2025/04/how_to_use_geosite/)

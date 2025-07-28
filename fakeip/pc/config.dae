@@ -15,7 +15,13 @@ dns {
     request {
       qname(geosite:category-ads) -> reject
       qname(geosite:category-ads-all) -> reject
+
+      qname(geosite:geolocation-!cn@cn) -> alidns
+      qname(geosite:geolocation-!cn) -> fakeip
+      qname(geosite:geolocation-cn@!cn) -> fakeip
       qname(geosite:cn) -> alidns
+      qname(suffix: xxxx.top) -> alidns
+
       fallback: fakeip
     }
   }
