@@ -96,7 +96,7 @@ proxy-groups-anchor: &exclude-filter
   exclude-filter: "朝鲜|套餐|到期|线路|订阅|更新|流量|剩余|客户端|如果|网站|0.1x"
 
 proxy-groups:
-  - name: 默认
+  - name: Default
     type: select
     proxies:
       [
@@ -118,7 +118,7 @@ proxy-groups:
     type: select
     proxies:
       [
-        默认,
+        Default,
         West,
         Fast,
         香港,
@@ -136,7 +136,7 @@ proxy-groups:
     type: select
     proxies:
       [
-        默认,
+        Default,
         West,
         Fast,
         香港,
@@ -153,7 +153,7 @@ proxy-groups:
     type: select
     proxies:
       [
-        默认,
+        Default,
         West,
         Fast,
         香港,
@@ -171,7 +171,7 @@ proxy-groups:
     type: select
     proxies:
       [
-        默认,
+        Default,
         West,
         Fast,
         香港,
@@ -189,7 +189,7 @@ proxy-groups:
     type: select
     proxies:
       [
-        默认,
+        Default,
         香港,
         台湾,
         日本,
@@ -205,7 +205,7 @@ proxy-groups:
     type: select
     proxies:
       [
-        默认,
+        Default,
         West,
         Fast,
         香港,
@@ -223,7 +223,7 @@ proxy-groups:
     type: select
     proxies:
       [
-        默认,
+        Default,
         West,
         Fast,
         香港,
@@ -241,7 +241,7 @@ proxy-groups:
     type: select
     proxies:
       [
-        默认,
+        Default,
         West,
         Fast,
         香港,
@@ -260,7 +260,7 @@ proxy-groups:
     type: select
     proxies:
       [
-        默认,
+        Default,
         West,
         Fast,
         香港,
@@ -367,4 +367,4 @@ rules:
   - GEOIP,google,Google,no-resolve
   - GEOIP,netflix,NETFLIX,no-resolve
   - GEOIP,twitter,Twitter,no-resolve
-  - MATCH,默认
+  - MATCH,Default
