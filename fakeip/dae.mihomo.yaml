@@ -45,15 +45,18 @@ dns:
     - ping.archlinux.org
     - +.msftconnecttest.com
     - +.msftncsi.com
-  direct-nameserver:
-    - https://223.5.5.5/dns-query
-    - 119.29.29.29
+  direct-nameserver: # 直连的dns, 为了避免system的分流，不使用system
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
   proxy-server-nameserver:
-    - https://223.5.5.5/dns-query
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  fallback: # fallback, 按照目前的配置就是fakeip filter的域名
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+  default-nameserver: # 用于解析dns的域名
     - 119.29.29.29
-  fallback:
-    - 8.8.8.8
-    - 1.1.1.1
+    - 223.5.5.5
 
 proxy-providers:
   niubi:
