@@ -43,6 +43,8 @@ dns:
     - zhuzhuzhu.xxxx.com
     - submit.xxxx.cn
     - ping.archlinux.org
+    - +.msftconnecttest.com
+    - +.msftncsi.com
   direct-nameserver:
     - system
   proxy-server-nameserver:
