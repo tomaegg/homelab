@@ -34,11 +34,8 @@ routing {
   pname(smartdns) && l4proto(udp) && dport(7853) -> must_direct   # smartdns -> mihomo
   pname(AdGuardHome) && l4proto(udp) && dport(53) -> must_direct  # adguard -> smartdns
 
-  dip(198.18.0.0/16) -> proxy
-
-  dip(224.0.0.0/3, 'ff00::/8') -> direct
-  dip(geoip:private) -> direct
   dip(geoip:cn) -> direct
-
+  dip(198.18.0.0/16) -> proxy
+  dip(geoip:private) -> direct
   fallback: proxy
 }
