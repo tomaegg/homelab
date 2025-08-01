@@ -29,10 +29,11 @@ group {
 }
 
 routing {
-  pname(NetworkManager, clash-meta, mihomo, clash) -> must_direct 
-  pname(smartdns) && l4proto(udp) && dport(53) -> must_direct     # smartdns -> upstream
-  pname(smartdns) && l4proto(udp) && dport(7853) -> must_direct   # smartdns -> mihomo
-  pname(AdGuardHome) && l4proto(udp) && dport(53) -> must_direct  # adguard -> smartdns
+  pname(mihomo) -> must_direct 
+  pname(smartdns, AdGuardHome) && l4proto(udp) && dport(53) -> must_direct
+
+  # 当adguardhome独立到192.168.2.10需要配置:
+  sip(192.168.2.10) && l4proto(udp) && dport(53) -> must_direct
 
   dip(geoip:cn) -> direct
   dip(198.18.0.0/16) -> proxy
