@@ -38,5 +38,9 @@ routing {
   dip(geoip:cn) -> direct
   dip(198.18.0.0/16) -> proxy
   dip(geoip:private) -> direct
+
+  # 当aria2下载被dscp标记时需要配置, 放在这里因为首先过滤掉proxy和direct:
+  dscp(2) -> direct
+  
   fallback: proxy
 }

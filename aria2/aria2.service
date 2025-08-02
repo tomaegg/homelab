@@ -1,0 +1,16 @@
+# path: /etc/systemd/system/aria2c.service
+
+[Unit]
+Description=aria2c with dscp mark
+
+[Service]
+Type=simple
+User=aria2
+PermissionsStartOnly=true
+ExecStartPre=/usr/local/bin/aria2c-iptables-setup.sh
+ExecStart=/usr/bin/aria2c --conf-path=/etc/aria2/aria2.conf
+ExecStopPost=/usr/local/bin/aria2c-iptables-cleanup.sh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
