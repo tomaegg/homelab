@@ -1,0 +1,40 @@
+# 基本配置
+mixed-port: 7890
+allow-lan: true
+bind-address: 0.0.0.0
+mode: rule
+log-level: info
+
+dns:
+  enable: true
+  ipv6: true
+  default-nameserver:
+    - 223.5.5.5
+    - 119.29.29.29
+
+# 代理节点
+proxies:
+  - name: home
+    type: ss
+    server: xxx
+    port: 24500
+    ip-version: ipv6
+    password: "xxx"  # Base64 格式
+    cipher: 2022-blake3-aes-256-gcm
+    udp: true
+
+  - name: "直连"
+    type: direct
+    udp: true
+
+# 代理分组
+proxy-groups:
+  - name: PROXY
+    type: select
+    proxies:
+      - home
+
+# 规则
+rules:
+  - IP-CIDR,192.168.2.0/24,PROXY,no-resolve
+  - MATCH,直连

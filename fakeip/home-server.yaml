@@ -1,0 +1,17 @@
+listeners:
+- name: ss-in
+  type: shadowsocks
+  port: 12312
+  listen: "::"
+  password: "xx"  # Base64 格式
+  cipher: 2022-blake3-aes-256-gcm
+  udp: true
+
+proxies: 
+  - name: "直连"
+    type: direct
+    udp: true
+
+rules:
+  # wan inbound
+  - IP-CIDR,192.168.2.0/24,DIRECT
