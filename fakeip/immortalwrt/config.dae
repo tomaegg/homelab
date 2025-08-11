@@ -9,11 +9,15 @@ global {
 
 dns {
   upstream {
-    adguard: 'udp://127.0.0.1:55553'
+    smartdns: 'udp://127.0.0.1:55553'
+    fakeip: 'udp://127.0.0.1:7853'
   }
   routing {
     request {
-      fallback: adguard
+      qname(geosite:private) -> smartdns
+      qname(geosite:cn, geosite:apple@cn, geosite:microsoft@cn) -> smartdns
+      qname(suffix: cyt-and-ls-love.top) -> smartdns
+      fallback: fakeip
     }
   }
 }
@@ -29,18 +33,12 @@ group {
 }
 
 routing {
-  pname(mihomo) -> must_direct 
-  pname(smartdns, AdGuardHome) && l4proto(udp) && dport(53) -> must_direct
+  pname(mihomo) -> must_direct
+  pname(smartdns) && l4proto(udp) && dport(53,7853) -> must_direct
 
-  # 当adguardhome独立到192.168.2.10需要配置:
-  sip(192.168.2.10) && l4proto(udp) && dport(53) -> must_direct
-
-  dip(geoip:cn) -> direct
   dip(198.18.0.0/16) -> proxy
+  dip(geoip:cn) -> direct
   dip(geoip:private) -> direct
-
-  # 当aria2下载被dscp标记时需要配置, 放在这里因为首先过滤掉proxy和direct:
   dscp(2) -> direct
-  
   fallback: proxy
 }
