@@ -14,9 +14,11 @@ dns {
   }
   routing {
     request {
+      qname(geosite:gfw) -> fakeip
       qname(geosite:private) -> smartdns
       qname(geosite:cn, geosite:apple@cn, geosite:microsoft@cn) -> smartdns
       qname(suffix: cyt-and-ls-love.top) -> smartdns
+      qtype(aaaa, https) -> reject
       fallback: fakeip
     }
   }
@@ -34,7 +36,7 @@ group {
 
 routing {
   pname(mihomo) -> must_direct
-  pname(smartdns) && l4proto(udp) && dport(53,7853) -> must_direct
+  pname(smartdns) -> must_direct 
 
   dip(198.18.0.0/16) -> proxy
   dip(geoip:cn) -> direct
