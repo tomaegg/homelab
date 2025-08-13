@@ -176,6 +176,7 @@ proxy-groups:
         Default,
         West,
         Fast,
+        Stream,
         香港,
         台湾,
         日本,
@@ -192,6 +193,7 @@ proxy-groups:
     proxies:
       [
         Default,
+        Stream,
         香港,
         台湾,
         日本,
@@ -318,6 +320,14 @@ proxy-groups:
     exclude-type: direct
     <<: *exclude-filter
     filter: "(?i)日|新|美|加|德|澳|JP|SG|US|CA|GE|AU"
+
+  - name: Stream
+    type: url-test
+    use:
+      - niubi
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)流媒体"
 
   - name: 美国
     type: url-test
