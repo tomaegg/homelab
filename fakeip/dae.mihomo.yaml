@@ -95,7 +95,7 @@ proxy-providers:
       ip-version: ipv6-prefer
 
 proxy-groups-anchor: &exclude-filter
-  exclude-filter: "朝鲜|套餐|到期|线路|订阅|更新|流量|剩余|客户端|如果|网站|0.1x"
+  exclude-filter: "朝鲜|套餐|到期|线路|订阅|更新|流量|剩余|客户端|如果|网站|0.1x|home"
 
 proxy-groups:
   - name: Default
