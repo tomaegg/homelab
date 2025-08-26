@@ -358,8 +358,6 @@ proxy-groups:
     tolerance: 30
 
 rules:
-  - IP-CIDR,192.168.2.0/24,DIRECT,no-resolve
-  # 常用访问前置, 此处分流流量只存在海外
   - GEOSITE,youtube,YouTube
   - GEOSITE,google,Google
   - GEOSITE,github,Github
@@ -374,4 +372,5 @@ rules:
   - GEOIP,google,Google,no-resolve
   - GEOIP,netflix,NETFLIX,no-resolve
   - GEOIP,twitter,Twitter,no-resolve
+  - IP-CIDR,192.168.2.0/24,DIRECT,no-resolve
   - MATCH,Default
