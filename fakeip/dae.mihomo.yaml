@@ -39,7 +39,7 @@ dns:
   ipv6: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
-  fake-ip-filter: 
+  fake-ip-filter:
     - zhuzhuzhu.xxxx.com
     - submit.xxxx.cn
     - ping.archlinux.org
@@ -91,215 +91,68 @@ proxy-providers:
 proxy-groups-anchor: &exclude-filter
   exclude-filter: "朝鲜|套餐|到期|线路|订阅|更新|流量|剩余|客户端|如果|网站|0.1x|home"
 
+x-proxies: &proxies
+  - West
+  - Fast
+  - Stream
+  - 香港
+  - 香港-手动
+  - 台湾
+  - 台湾-手动
+  - 日本
+  - 日本-手动
+  - 新加坡
+  - 新加坡-手动
+  - 韩国
+  - 韩国-手动
+  - 美国
+  - 美国-手动
+  - 其它地区
+  - 全部节点
+  - 自动选择
+  - DIRECT
+  - REJECT
+
 proxy-groups:
   - name: Default
     type: select
-    proxies:
-      [
-        自动选择,
-        West,
-        Fast,
-        香港,
-        台湾,
-        日本,
-        新加坡,
-        美国,
-        其它地区,
-        全部节点,
-        DIRECT,
-        REJECT,
-      ]
+    proxies: *proxies
 
   - name: Google
     type: select
-    proxies:
-      [
-        Default,
-        West,
-        Fast,
-        香港,
-        台湾,
-        日本,
-        新加坡,
-        美国,
-        其它地区,
-        全部节点,
-        自动选择,
-        REJECT,
-      ]
+    proxies: *proxies
 
   - name: Telegram
     type: select
-    proxies:
-      [
-        Default,
-        West,
-        Fast,
-        香港,
-        台湾,
-        日本,
-        新加坡,
-        美国,
-        其它地区,
-        全部节点,
-        自动选择,
-        REJECT,
-      ]
+    proxies: *proxies
+
   - name: Twitter
     type: select
-    proxies:
-      [
-        Default,
-        West,
-        Fast,
-        香港,
-        台湾,
-        日本,
-        新加坡,
-        美国,
-        其它地区,
-        全部节点,
-        自动选择,
-        REJECT,
-      ]
+    proxies: *proxies
 
   - name: YouTube
     type: select
-    proxies:
-      [
-        Default,
-        West,
-        Fast,
-        Stream,
-        香港,
-        台湾,
-        日本,
-        新加坡,
-        美国,
-        其它地区,
-        全部节点,
-        自动选择,
-        REJECT,
-      ]
+    proxies: *proxies
 
   - name: NETFLIX
     type: select
-    proxies:
-      [
-        Default,
-        Stream,
-        香港,
-        台湾,
-        日本,
-        新加坡,
-        美国,
-        其它地区,
-        全部节点,
-        自动选择,
-        REJECT,
-      ]
+    proxies: *proxies
 
   - name: Spotify
     type: select
-    proxies:
-      [
-        Default,
-        West,
-        Fast,
-        香港,
-        台湾,
-        日本,
-        新加坡,
-        美国,
-        其它地区,
-        全部节点,
-        自动选择,
-        REJECT,
-      ]
+    proxies: *proxies
 
   - name: Github
     type: select
-    proxies:
-      [
-        Default,
-        West,
-        Fast,
-        香港,
-        台湾,
-        日本,
-        新加坡,
-        美国,
-        其它地区,
-        全部节点,
-        自动选择,
-        REJECT,
-      ]
+    proxies: *proxies
 
   - name: AI
     type: select
-    proxies:
-      [
-        Default,
-        West,
-        Fast,
-        香港,
-        台湾,
-        日本,
-        新加坡,
-        美国,
-        其它地区,
-        全部节点,
-        自动选择,
-        DIRECT,
-        REJECT,
-      ]
+    proxies: *proxies
 
   - name: TikTok
     type: select
-    proxies:
-      [
-        Default,
-        West,
-        Fast,
-        香港,
-        台湾,
-        日本,
-        新加坡,
-        美国,
-        其它地区,
-        全部节点,
-        自动选择,
-        DIRECT,
-        REJECT,
-      ]
-
-  - name: 香港
-    type: url-test
-    include-all: true
-    exclude-type: direct
-    <<: *exclude-filter
-    filter: "(?i)港|hk|hongkong|hong kong"
-
-  - name: 台湾
-    type: url-test
-    include-all: true
-    exclude-type: direct
-    <<: *exclude-filter
-    filter: "(?i)台|tw|taiwan"
-
-  - name: 日本
-    type: url-test
-    include-all: true
-    exclude-type: direct
-    <<: *exclude-filter
-    filter: "(?i)日|jp|japan"
-
-  - name: 韩国
-    type: url-test
-    include-all: true
-    exclude-type: direct
-    <<: *exclude-filter
-    filter: "(?i)韩|kp|korea"
+    proxies: *proxies
 
   - name: Fast
     type: url-test
@@ -317,14 +170,20 @@ proxy-groups:
 
   - name: Stream
     type: url-test
-    use:
-      - niubi
+    include-all: true
     exclude-type: direct
     <<: *exclude-filter
-    filter: "(?i)流媒体"
+    filter: "流媒体"
 
   - name: 美国
     type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)美|us|unitedstates|united states"
+
+  - name: 美国-手动
+    type: select
     include-all: true
     exclude-type: direct
     <<: *exclude-filter
@@ -336,6 +195,69 @@ proxy-groups:
     exclude-type: direct
     <<: *exclude-filter
     filter: "(?i)(新|sg|singapore)"
+
+  - name: 新加坡-手动
+    type: select
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)(新|sg|singapore)"
+
+  - name: 香港
+    type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)港|hk|hongkong|hong kong"
+
+  - name: 香港-手动
+    type: select
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)港|hk|hongkong|hong kong"
+
+  - name: 台湾
+    type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)台|tw|taiwan"
+
+  - name: 台湾-手动
+    type: select
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)台|tw|taiwan"
+
+  - name: 日本
+    type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)日|jp|japan"
+
+  - name: 日本-手动
+    type: select
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)日|jp|japan"
+
+  - name: 韩国
+    type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)韩|kp|korea"
+
+  - name: 韩国-手动
+    type: select
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)韩|kp|korea"
 
   - name: 其它地区
     type: select
@@ -357,11 +279,26 @@ proxy-groups:
     exclude-type: direct
     tolerance: 30
 
+  - name: HOME
+    type: select
+    proxies: [home-ss]
+
+proxies:
+  - name: home-ss
+    type: ss
+    server: .top
+    port: xxx
+    ip-version: ipv6
+    password: ""
+    cipher: 2022-blake3-aes-256-gcm
+    udp: true
+
 rules:
   - GEOSITE,youtube,YouTube
   - GEOSITE,google,Google
   - GEOSITE,github,Github
   - GEOSITE,category-ai-!cn,AI
+  - GEOSITE,category-games@cn,DIRECT
   - GEOSITE,tiktok,TikTok
   - GEOSITE,twitter,Twitter
   - GEOSITE,telegram,Telegram
@@ -372,5 +309,5 @@ rules:
   - GEOIP,google,Google,no-resolve
   - GEOIP,netflix,NETFLIX,no-resolve
   - GEOIP,twitter,Twitter,no-resolve
-  - IP-CIDR,192.168.2.0/24,DIRECT,no-resolve
+  - IP-CIDR,192.168.2.0/24,HOME,no-resolve
   - MATCH,Default
