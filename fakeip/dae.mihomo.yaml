@@ -35,22 +35,22 @@ sniffer:
 
 dns:
   enable: true
+  cache-max-size: 16384
   listen: 0.0.0.0:7853
   ipv6: true
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
-    - zhuzhuzhu.xxxx.com
-    - submit.xxxx.cn
-    - ping.archlinux.org
-    - +.msftconnecttest.com
-    - +.msftncsi.com
-  nameserver:
+    - geosite:connectivity-check
+    - zhuzhuzhu.xxx.com
+    - submit.xxx.cn
+  name-nameserver:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
-  default-nameserver: # 用于解析dns的域名
-    - tls://119.29.29.29
+  default-nameserver:
+    - https://223.5.5.5/dns-query
     - tls://223.5.5.5
+    - 119.29.29.29
 
 proxy-providers:
   niubi:
