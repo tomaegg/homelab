@@ -295,9 +295,9 @@ proxies:
 
 rules:
   - GEOSITE,youtube,YouTube
+  - GEOSITE,category-ai-!cn,AI
   - GEOSITE,google,Google
   - GEOSITE,github,Github
-  - GEOSITE,category-ai-!cn,AI
   - GEOSITE,category-games@cn,DIRECT
   - GEOSITE,tiktok,TikTok
   - GEOSITE,twitter,Twitter
