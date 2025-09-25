@@ -1,0 +1,95 @@
+appConfig:
+  theme: colorful
+  layout: auto
+  iconSize: large
+  language: zh
+  auth:
+    enableGuestAccess: true
+
+pageInfo:
+  title: 我的家庭服务面板
+  description: 常用服务入口集中管理
+  navLinks:
+    - title: GitHub
+      path: https://github.com
+
+sections:
+  - name: 多媒体服务
+    icon: mdi-movie-open
+    items:
+      - title: Immich
+        description: 自建照片管理
+        icon: mdi-image-multiple
+        url: http://192.168.2.200:2283
+      - title: Jellyfin
+        description: 家庭影音中心
+        icon: mdi-play-circle
+        url: http://192.168.2.200:8096
+      - title: MoonTV
+        description: 在线电视服务
+        icon: mdi-television-classic
+        url: http://192.168.2.200:3000
+      - title: 海信投屏 (Windows)
+        description: DLNA/投屏
+        icon: mdi-cast
+        url: http://192.168.2.167:1111
+
+  - name: 网络与路由
+    icon: mdi-router-network
+    items:
+      - title: ImmortalWRT
+        description: 主路由管理界面
+        icon: mdi-router-wireless
+        url: http://192.168.2.1
+      - title: metacubex 面板
+        description: Mihomo 管理面板
+        icon: mdi-shield-lock
+        url: http://192.168.2.1:20000
+      - title: AdGuard Home
+        description: DNS 广告拦截
+        icon: mdi-shield-check
+        url: http://192.168.2.200:30000
+      - title: 小米路由器
+        description: 分路由管理
+        icon: favicon
+        url: http://192.168.2.10
+      - title: 书房路由器
+        description: 分路由管理
+        icon: mdi-access-point
+        url: http://192.168.2.2
+      - title: 次卧路由器
+        description: 分路由管理
+        icon: mdi-access-point
+        url: http://192.168.2.3
+      - title: DDNS
+        description: DDNS管理
+        icon: mdi-access-point
+        url: http://192.168.2.1:9876
+
+  - name: 工具与系统
+    icon: mdi-cog
+    items:
+      - title: CUPS 打印服务
+        description: 网络打印管理
+        icon: mdi-printer
+        url: https://192.168.2.200:631
+      - title: Aria2
+        description: 下载管理
+        icon: mdi-download
+        url: http://192.168.2.200:8080
+      - title: 配置文件下载
+        description: 各类配置文件
+        icon: mdi-file-download
+        url: http://192.168.2.200:9898
+      - title: Cockpit
+        description: Linux Web 控制台
+        icon: mdi-monitor-dashboard
+        url: https://192.168.2.200:9090
+
+  - name: 常用服务
+    icon: mdi-cog
+    items:
+      - title: OpenWebUI
+        description: ChatGPT
+        icon: si-openai
+        url: http://192.168.2.200:2333
