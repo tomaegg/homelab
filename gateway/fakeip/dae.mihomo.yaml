@@ -42,12 +42,15 @@ dns:
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
     - geosite:connectivity-check
-    - zhuzhuzhu.xxx.com
-    - submit.xxx.cn
+    - geosite:private
+    - geosite:cn
   name-nameserver:
+    - "2402:4e00::"
+    - https://sm2.doh.pub/dns-query
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
   default-nameserver:
+    - "2402:4e00::"
     - https://223.5.5.5/dns-query
     - tls://223.5.5.5
     - 119.29.29.29
@@ -68,7 +71,6 @@ proxy-providers:
       expected-status: 204
     override:
       additional-prefix: "[niubi]"
-      skip-cert-verify: false
       ip-version: ipv6-prefer
   linghunyun:
     type: http
@@ -85,7 +87,6 @@ proxy-providers:
       expected-status: 204
     override:
       additional-prefix: "[linghunyun]"
-      skip-cert-verify: false
       ip-version: ipv6-prefer
 
 proxy-groups-anchor: &exclude-filter
