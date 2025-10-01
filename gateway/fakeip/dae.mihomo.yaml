@@ -44,6 +44,8 @@ dns:
     - geosite:connectivity-check
     - geosite:private
     - geosite:cn
+  nameserver-policy:
+    'geosite:private': 127.0.0.1
   name-nameserver:
     - "2402:4e00::"
     - https://sm2.doh.pub/dns-query
