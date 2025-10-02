@@ -41,20 +41,29 @@ dns:
   enhanced-mode: fake-ip
   fake-ip-range: 198.18.0.1/16
   fake-ip-filter:
+    - geosite:cn
     - geosite:connectivity-check
     - geosite:private
-    - geosite:cn
+    - +.push.apple.com
+    - +.xxx.top
   nameserver-policy:
+    'geosite:cn':
+       - 'isp-dns'
+       - "2402:4e00::"
+       - https://dns.alidns.com/dns-query
+       - https://doh.pub/dns-query
+       - https://sm2.doh.pub/dns-query
+       - tls://dot.pub
     'geosite:private': 127.0.0.1
+    '+.xxx.top': 223.5.5.5
   name-nameserver:
-    - "2402:4e00::"
-    - https://sm2.doh.pub/dns-query
-    - https://dns.alidns.com/dns-query
-    - https://doh.pub/dns-query
+    - 1.1.1.1
+    - 8.8.8.8
   default-nameserver:
-    - "2402:4e00::"
     - https://223.5.5.5/dns-query
     - tls://223.5.5.5
+    - 223.5.5.5
+    - "2402:4e00::"
     - 119.29.29.29
 
 proxy-providers:
