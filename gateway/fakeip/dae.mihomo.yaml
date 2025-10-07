@@ -48,6 +48,7 @@ dns:
     - +.xxx.top
   nameserver-policy:
     'geosite:cn':
+       - 'dhcp://eth0'
        - 'isp-dns'
        - "2402:4e00::"
        - https://dns.alidns.com/dns-query
@@ -56,46 +57,41 @@ dns:
        - tls://dot.pub
     'geosite:private': 127.0.0.1
     '+.xxx.top': 223.5.5.5
+  proxy-namserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    - https://sm2.doh.pub/dns-query
   name-nameserver:
-    - 1.1.1.1
-    - 8.8.8.8
+    - 1.1.1.1#DNS
+    - 8.8.8.8#DNS
   default-nameserver:
-    - https://223.5.5.5/dns-query
-    - tls://223.5.5.5
     - 223.5.5.5
     - "2402:4e00::"
     - 119.29.29.29
 
+x-provider: &base_provider
+  type: http
+  interval: 1800
+  proxy: DIRECT
+  health-check:
+    enable: true
+    url: https://cp.cloudflare.com
+    interval: 90
+    timeout: 3000
+    lazy: true
+    expected-status: 204
 proxy-providers:
   niubi:
-    type: http
+    <<: *base_provider
     url: ""
-    interval: 1800
     path: ./niubi.yaml
-    proxy: DIRECT
-    health-check:
-      enable: true
-      url: https://cp.cloudflare.com
-      interval: 300
-      timeout: 5000
-      lazy: true
-      expected-status: 204
     override:
       additional-prefix: "[niubi]"
       ip-version: ipv6-prefer
   linghunyun:
-    type: http
+    <<: *base_provider
     url: ""
-    interval: 1800
     path: ./linghunyun.yaml
-    proxy: DIRECT
-    health-check:
-      enable: true
-      url: https://cp.cloudflare.com
-      interval: 300
-      timeout: 5000
-      lazy: true
-      expected-status: 204
     override:
       additional-prefix: "[linghunyun]"
       ip-version: ipv6-prefer
@@ -126,6 +122,13 @@ x-proxies: &proxies
   - REJECT
 
 proxy-groups:
+  - name: DNS
+    type: url-test
+    include-all: true
+    <<: *exclude-filter
+    exclude-type: direct
+    tolerance: 30
+
   - name: Default
     type: select
     proxies: *proxies
