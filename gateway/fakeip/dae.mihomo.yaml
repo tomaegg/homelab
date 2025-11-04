@@ -11,7 +11,7 @@ profile:
   store-selected: true
   store-fake-ip: true
 
-external-controller: 0.0.0.0:9090
+external-controller: 0.0.0.1:9090
 external-controller-cors:
   allow-origins:
     - "*"
@@ -21,12 +21,6 @@ secret: enter_password
 geodata-mode: true
 geo-auto-update: true
 geo-update-interval: 24 # hours
-geox-url:
-  # or use original github domains
-  # geoip: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geoip-lite.dat"
-  # geosite: "https://github.com/MetaCubeX/meta-rules-dat/releases/download/latest/geosite.dat"
-  geoip: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat"
-  geosite: "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat"
 
 # ==================global config end=====================
 
@@ -47,16 +41,16 @@ dns:
     - +.push.apple.com
     - +.xxx.top
   nameserver-policy:
-    'geosite:cn':
-       - 'dhcp://eth0'
-       - 'isp-dns'
-       - "2402:4e00::"
-       - https://dns.alidns.com/dns-query
-       - https://doh.pub/dns-query
-       - https://sm2.doh.pub/dns-query
-       - tls://dot.pub
-    'geosite:private': 127.0.0.1
-    '+.xxx.top': 223.5.5.5
+    "geosite:cn":
+      - "dhcp://eth0"
+      - "isp-dns"
+      - "2402:4e00::"
+      - https://dns.alidns.com/dns-query
+      - https://doh.pub/dns-query
+      - https://sm2.doh.pub/dns-query
+      - tls://dot.pub
+    "geosite:private": 127.0.0.1
+    "+.xxx.top": 223.5.5.5
   proxy-namserver:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
@@ -97,7 +91,7 @@ proxy-providers:
       ip-version: ipv6-prefer
 
 proxy-groups-anchor: &exclude-filter
-  exclude-filter: "朝鲜|套餐|到期|线路|订阅|更新|流量|剩余|客户端|如果|网站|0.1x|home"
+  exclude-filter: "(?i)expire|traffic|朝鲜|套餐|到期|线路|订阅|更新|流量|剩余|客户端|如果|网站|0.1x|home"
 
 x-proxies: &proxies
   - West
