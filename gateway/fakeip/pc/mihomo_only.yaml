@@ -1,0 +1,309 @@
+mode: rule
+ipv6: true
+log-level: info
+allow-lan: false
+find-process-mode: off
+geodata-mode: true
+external-ui: ui
+external-controller: 127.0.0.1:9090
+
+# ==================global config end=====================
+
+tun:
+  enable: true
+  stack: system
+  auto-route: true
+  auto-redirect: true
+  auto-detect-interface: true
+  dns-hijack:
+    - any:53
+    - tcp://any:53
+
+sniffer:
+  enable: true
+  sniff:
+    HTTP:
+      ports: [80, 8080-8880]
+      override-destination: true
+    TLS:
+      ports: [443, 8443]
+    QUIC:
+      ports: [443, 8443]
+
+dns:
+  enable: true
+  cache-max-size: 16384
+  listen: 0.0.0.0:7853
+  ipv6: true
+  enhanced-mode: fake-ip
+  fake-ip-range: 198.18.0.1/16
+  fake-ip-range6: fdfe:dcba:9876::1/64
+  fake-ip-filter:
+    - geosite:cn
+    - geosite:connectivity-check
+    - geosite:private
+    - +.push.apple.com
+  nameserver-policy:
+    'geosite:cn':
+       - 'dhcp://en0'
+       - "2402:4e00::"
+       - https://dns.alidns.com/dns-query
+       - https://doh.pub/dns-query
+       - https://sm2.doh.pub/dns-query
+       - tls://dot.pub
+  proxy-namserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+    - https://sm2.doh.pub/dns-query
+  name-nameserver:
+    - 1.1.1.1#DNS
+    - 8.8.8.8#DNS
+  default-nameserver:
+    - 223.5.5.5
+    - "2402:4e00::"
+    - 119.29.29.29
+
+x-provider: &base_provider
+  type: http
+  interval: 1800
+  proxy: DIRECT
+  health-check:
+    enable: true
+    url: https://cp.cloudflare.com
+    interval: 90
+    timeout: 3000
+    lazy: true
+    expected-status: 204
+
+proxy-providers:
+  niubi:
+    <<: *base_provider
+    url: ""
+    path: niubi.yaml
+    override:
+      additional-prefix: "[niubi]"
+      ip-version: ipv6-prefer
+  linkcube:
+    <<: *base_provider
+    url: ""
+    path: linkcube.yaml
+    override:
+      additional-prefix: "[linkcube]"
+      ip-version: ipv6-prefer
+
+proxy-groups-anchor: &exclude-filter
+  exclude-filter: "(?i)expire|traffic|朝鲜|套餐|到期|线路|订阅|更新|流量|剩余|客户端|如果|网站|0.1x|home"
+
+x-proxies: &proxies
+  - West
+  - Fast
+  - 香港
+  - 香港-手动
+  - 台湾
+  - 台湾-手动
+  - 日本
+  - 日本-手动
+  - 新加坡
+  - 新加坡-手动
+  - 韩国
+  - 韩国-手动
+  - 美国
+  - 美国-手动
+  - 其它地区
+  - 全部节点
+  - 自动选择
+  - DIRECT
+  - REJECT
+proxy-groups:
+  - name: DNS
+    type: url-test
+    include-all: true
+    <<: *exclude-filter
+    exclude-type: direct
+    tolerance: 30
+
+  - name: Default
+    type: select
+    proxies: *proxies
+
+  - name: Google
+    type: select
+    proxies: *proxies
+
+  - name: Telegram
+    type: select
+    proxies: *proxies
+
+  - name: Twitter
+    type: select
+    proxies: *proxies
+
+  - name: YouTube
+    type: select
+    proxies: *proxies
+
+  - name: NETFLIX
+    type: select
+    proxies: *proxies
+
+  - name: Spotify
+    type: select
+    proxies: *proxies
+    
+  - name: Github
+    type: select
+    proxies: *proxies
+    
+  - name: AI
+    type: select
+    proxies: *proxies
+    
+  - name: TikTok
+    type: select
+    proxies: *proxies
+
+  - name: Fast
+    type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)日|新|港|台|韩|JP|SG|HK|TW|KP"
+
+  - name: West
+    type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)日|新|美|加|德|澳|JP|SG|US|CA|GE|AU"
+
+  - name: 美国
+    type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)美|us|unitedstates|united states"
+
+  - name: 美国-手动
+    type: select
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)美|us|unitedstates|united states"
+
+  - name: 新加坡
+    type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)(新|sg|singapore)"
+
+  - name: 新加坡-手动
+    type: select
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)(新|sg|singapore)"
+
+  - name: 香港
+    type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)港|hk|hongkong|hong kong"
+
+  - name: 香港-手动
+    type: select
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)港|hk|hongkong|hong kong"
+
+  - name: 台湾
+    type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)台|tw|taiwan"
+
+  - name: 台湾-手动
+    type: select
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)台|tw|taiwan"
+
+  - name: 日本
+    type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)日|jp|japan"
+
+  - name: 日本-手动
+    type: select
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)日|jp|japan"
+
+  - name: 韩国
+    type: url-test
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)韩|kp|korea"
+
+  - name: 韩国-手动
+    type: select
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)韩|kp|korea"
+
+  - name: 其它地区
+    type: select
+    include-all: true
+    exclude-type: direct
+    <<: *exclude-filter
+    filter: "(?i)^(?!.*(?:🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|新|sg|singapore|美|us|unitedstates|韩|kp|korea)).*"
+
+  - name: 全部节点
+    type: select
+    include-all: true
+    <<: *exclude-filter
+    exclude-type: direct
+
+  - name: 自动选择
+    type: url-test
+    include-all: true
+    <<: *exclude-filter
+    exclude-type: direct
+    tolerance: 30
+
+  - name: 国内
+    type: select
+    proxies:
+      - DIRECT
+      - Default
+
+rules:
+  - GEOSITE,category-ai-!cn,AI
+  - GEOSITE,google,Google
+  - GEOSITE,CN,国内
+  - GEOSITE,category-games@cn,国内
+  - GEOSITE,github,Github
+  - GEOSITE,youtube,YouTube
+  - GEOSITE,tiktok,TikTok
+  - GEOSITE,twitter,Twitter
+  - GEOSITE,telegram,Telegram
+  - GEOSITE,netflix,NETFLIX
+  - GEOSITE,spotify,Spotify
+
+  - GEOIP,CN,国内,no-resolve
+  - GEOIP,telegram,Telegram,no-resolve
+  - GEOIP,google,Google,no-resolve
+  - GEOIP,netflix,NETFLIX,no-resolve
+  - GEOIP,twitter,Twitter,no-resolve
+  - GEOIP,private,DIRECT,no-resolve
+  - MATCH,Default
+
