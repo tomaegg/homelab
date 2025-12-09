@@ -51,11 +51,11 @@ dns:
        - https://doh.pub/dns-query
        - https://sm2.doh.pub/dns-query
        - tls://dot.pub
-  proxy-namserver:
+  proxy-server-nameserver:
     - https://dns.alidns.com/dns-query
     - https://doh.pub/dns-query
     - https://sm2.doh.pub/dns-query
-  name-nameserver:
+  nameserver:
     - 1.1.1.1#DNS
     - 8.8.8.8#DNS
   default-nameserver:
