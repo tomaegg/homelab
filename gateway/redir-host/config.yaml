@@ -1,39 +1,49 @@
-mixed-port: 32520
 mode: rule
+mixed-port: 32520
 ipv6: true
 log-level: info
-allow-lan: false
-find-process-mode: off
+allow-lan: true
+global-client-fingerprint: chrome
 unified-delay: true
 
-geodata-mode: true
-geo-update-interval: 24
-geo-auto-update: true
+profile:
+  store-selected: true
+  store-fake-ip: true
 
-secret: "190514"
 external-controller: 127.0.0.1:9090
-external-ui: ui
 external-controller-cors:
   allow-origins:
-    - '*'
+    - "*"
+  allow-private-network: true
+secret: 190514
+
+geodata-mode: true
+geo-auto-update: true
+geo-update-interval: 24 # hours
+geox-url:
+  geoip: "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geoip.dat"
+  geosite: "https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat"
+
+external-ui: "ui"
 
 # ==================global config end=====================
 
 tun:
   enable: true
-  auto-detect-interface: true
-  auto-route: true
-  device: utun1024
-  dns-hijack:
-  - any:53
   stack: system
+  dns-hijack:
+    - "any:53"
+  auto-route: true
+  auto-redirect: true
+  auto-detect-interface: true
 
 sniffer:
   enable: true
+  force-dns-mapping: true
+  parse-pure-ip: true
   sniff:
     HTTP:
       ports: [80, 8080-8880]
-      override-destination: true
     TLS:
       ports: [443, 8443]
     QUIC:
@@ -46,9 +56,11 @@ dns:
   ipv6: true
   enhanced-mode: redir-host
   nameserver-policy:
-    "geosite:cn,apple": [dhcp://en0, dhcp://en1]
+    "+.cyt-and-ls-love.top": 223.5.5.5
+    "geosite:private": 127.0.0.1
+    "geosite:cn,apple,microsoft": [system]
   proxy-server-nameserver: [https://doh.pub/dns-query]
-  nameserver: ["1.1.1.1#DNS", "8.8.4.4#DNS", "tcp://8.8.8.8#DNS"]
+  nameserver: [1.1.1.1#DNS, 8.8.4.4#DNS, tcp://8.8.8.8#DNS]
 
 x-provider: &base_provider
   type: http
@@ -61,7 +73,6 @@ x-provider: &base_provider
     timeout: 3000
     lazy: true
     expected-status: 204
-
 proxy-providers:
   niubi:
     <<: *base_provider
@@ -101,9 +112,10 @@ x-proxies: &proxies
   - 自动选择
   - DIRECT
   - REJECT
+
 proxy-groups:
   - name: DNS
-    type: url-test
+    type: load-balance
     use: [linkcube]
     <<: *exclude-filter
     exclude-type: direct
@@ -112,7 +124,7 @@ proxy-groups:
   - name: Default
     type: select
     proxies: *proxies
-      
+
   - name: Google
     type: select
     proxies: *proxies
@@ -129,27 +141,31 @@ proxy-groups:
     type: select
     proxies: *proxies
 
-  - name: NETFLIX
-    type: select
-    proxies: *proxies
-
   - name: Spotify
     type: select
     proxies: *proxies
-    
+
   - name: Github
     type: select
     proxies: *proxies
-    
+
   - name: AI
+    type: select
+    proxies: *proxies
+
+  - name: TikTok
+    type: select
+    proxies: *proxies
+
+  - name: Games
     type: select
     proxies: *proxies
 
   - name: Apple
     type: select
     proxies: *proxies
-    
-  - name: TikTok
+
+  - name: Microsoft
     type: select
     proxies: *proxies
 
@@ -256,7 +272,7 @@ proxy-groups:
     include-all: true
     exclude-type: direct
     <<: *exclude-filter
-    filter: "(?i)^(?!.*(?:🇭🇰|🇯🇵|🇺🇸|🇸🇬|🇨🇳|港|hk|hongkong|台|tw|taiwan|日|jp|japan|新|sg|singapore|美|us|unitedstates|韩|kp|korea)).*"
+    filter: "(?i)^(?!.*(?:🇭🇰|🇺🇸|🇨🇳|hk|hongkong|台|tw|taiwan|日|jp|japan|新|sg|singapore|美|us|unitedstates|韩|kp|korea)).*"
 
   - name: 全部节点
     type: select
@@ -274,21 +290,21 @@ proxy-groups:
 rules:
   - GEOSITE,category-ai-!cn,AI
   - GEOSITE,google,Google
-  - GEOSITE,CN,DIRECT
-  - GEOSITE,category-games@cn,DIRECT
-  - GEOSITE,github,Github
-  - GEOSITE,apple,Apple
+  - GEOSITE,cn,DIRECT
   - GEOSITE,youtube,YouTube
+  - GEOSITE,category-games@cn,DIRECT
+  - GEOSITE,apple,Apple
+  - GEOSITE,github,Github
+  - GEOSITE,microsoft,Microsoft
+  - GEOSITE,telegram,Telegram
+  - GEOSITE,category-games,Games
   - GEOSITE,tiktok,TikTok
   - GEOSITE,twitter,Twitter
-  - GEOSITE,telegram,Telegram
-  - GEOSITE,netflix,NETFLIX
   - GEOSITE,spotify,Spotify
+  - DOMAIN-SUFFIX,cyt-and-ls-love.top,DIRECT
 
-  - GEOIP,private,DIRECT,no-resolve
-  - GEOIP,CN,DIRECT,no-resolve
+  - GEOIP,cn,DIRECT,no-resolve
   - GEOIP,telegram,Telegram,no-resolve
   - GEOIP,google,Google,no-resolve
-  - GEOIP,netflix,NETFLIX,no-resolve
   - GEOIP,twitter,Twitter,no-resolve
   - MATCH,Default
